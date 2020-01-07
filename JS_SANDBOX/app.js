@@ -1,3 +1,4 @@
+/* NUMBERS and MATH:
 console.time('test');
     console.log("Hello World");
     console.log(123);
@@ -29,5 +30,8 @@ val = Math.max(2,33,4,1,55,6,3,-2);
 val = Math.random();
 
 val = Math.floor(Math.random() * 20 + 1);
-
 console.log(val);
+
+*/
+
+// STRINGS
