@@ -1,3 +1,5 @@
+// this file can be executed by changing html line 11: app.js
+
 // NUMBERS and MATH:
 console.time('test');
     console.log("Hello World");
