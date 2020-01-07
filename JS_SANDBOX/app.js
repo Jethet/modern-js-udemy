@@ -1,4 +1,4 @@
-/* NUMBERS and MATH:
+// NUMBERS and MATH:
 console.time('test');
     console.log("Hello World");
     console.log(123);
@@ -32,6 +32,9 @@ val = Math.random();
 val = Math.floor(Math.random() * 20 + 1);
 console.log(val);
 
-*/
-
-// STRINGS
+arrayNumbers = [2,33,4,1,55,6,3,-2];
+console.log(arrayNumbers.find(function smaller(num) {
+     return num > 2;
+    }));
+// This will return 33 because this is the first num in the array
+// that is bigger than 2.
