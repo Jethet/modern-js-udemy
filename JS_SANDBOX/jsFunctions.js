@@ -16,3 +16,22 @@ console.log(countTwo());  // No parameters given, so default parameters: = 6
 (function(name){
     console.log('Hello ' + name);
 })('default');
+
+// Property methods: a function that is inside an object is a method
+const todo = {
+    add: function(){
+        console.log('Add todo ..');
+    },
+    edit: function(id){
+        console.log(`Edit todo ${id}`);
+    }
+};
+
+// Define function outside of the object:
+todo.delete = function(){
+    console.log('Delete todo ...');
+};
+
+todo.add();
+todo.edit(15);
+todo.delete();
