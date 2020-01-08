@@ -46,7 +46,7 @@ do {
 }
 while(i < 10);
 
-*/
+
 // forEach loop: use anonymous function with placeholder (here: current)
 
 const cars = ["one", "two", "three", "four"];
@@ -70,3 +70,17 @@ const ids = users.map(function(user){
     return user.id;
 });
 console.log(ids);
+*/
+
+// for .. in loop (generally used for objects):
+
+const user = {
+    firstName : 'Helen',
+    lastName: 'Smith',
+    age: 40
+};
+
+for(let x in user){
+    console.log(x);  // this returns the keys
+    console.log(`${x} : ${user[x]}`);
+}
