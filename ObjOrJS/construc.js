@@ -6,7 +6,7 @@ function Person(name, dob) {
         const diff = Date.now() - this.birthday.getTime();
         const ageDate = new Date(diff);
         return Math.abs(ageDate.getUTCFullYear() - 1970);
-    }   
+    };   
 }
 
 // Instantiate an object using 'new'
@@ -21,3 +21,6 @@ console.log(this);
 
 const helen = new Person('Helen', '9-10-81');
 console.log(helen.calculateAge());
+const mary = new Person('Mary', '2-11-85');
+console.log(mary.calculateAge());
+
