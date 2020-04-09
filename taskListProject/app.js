@@ -157,3 +157,7 @@ function filterTasks(e) {
     }
   });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  filter.value = '';
+})
