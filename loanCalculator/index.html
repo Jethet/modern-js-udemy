@@ -9,6 +9,13 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- CSS to hide loader and results when app first loads -->
+  <style>
+    #loading,
+    #results {
+      display: none;
+    }
+  </style>
 
   <title>Loan Calculator</title>
 </head>
@@ -32,7 +39,8 @@
               <div class="input-group mb-3">
                 <!-- <div class="input-group-prepend"> -->
                 <span class="input-group-text">%</span>
-                <input type="number" class="form-control" id="interest" autocomplete="off" placeholder="Interest Amount">
+                <input type="number" class="form-control" id="interest" autocomplete="off"
+                  placeholder="Interest Amount">
                 <!-- </div> -->
               </div>
               <div class="form-group">
@@ -41,12 +49,12 @@
               <div class="form-group">
                 <input type="submit" value="Calculate" class="btn btn-dark btn-block">
               </div>
-            </div> 
+            </div>
           </form>
           <!-- LOADER HERE -->
-          <!-- <div id="loading">
+          <div id="loading">
             <img src="img/loading.gif" alt="">
-          </div> -->
+          </div>
           <!-- RESULTS -->
           <div id="results">
             <h5>Results</h5>

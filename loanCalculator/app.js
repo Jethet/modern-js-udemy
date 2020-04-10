@@ -3,7 +3,7 @@
 document.querySelector("#loan-form").addEventListener("submit", calculateResults);
 
 // Calculate results
-function calculateResults(e) {
+function calculateResults() {
   // UI variables: it can be useful to add UI to the variable name, to make this clear
   const amount = document.querySelector("#amount");
   const interest = document.querySelector("#interest");
@@ -27,7 +27,6 @@ function calculateResults(e) {
   } else {
     showError("Please check your numbers");
   }
-  e.preventDefault();
 }
 
 // Show error message
