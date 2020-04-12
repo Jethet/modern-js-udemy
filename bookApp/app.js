@@ -17,7 +17,7 @@ UI.prototype.addBookToList = function (book) {
     <td>${book.title}</td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
-    <td><a href="# class="delete">X</td>`;
+    <td><a href="# class="delete" autocomplete="off">X</td>`;
 
   list.appendChild(row);
 };
@@ -43,13 +43,20 @@ UI.prototype.showAlert = function (message, className) {
   }, 3000);
 };
 
+// Delete Book
+UI.prototype.deleteBook = function(target) {
+  if(target.className === 'delete'){
+    target.parentElement.parentElement.remove()   // traversing the DOM to get from <a> element to
+  }                                              // <td> and then to <tr> element, to delete a row
+}
+
 UI.prototype.clearFields = function () {
   document.querySelector("#title").value = "";
   document.querySelector("#author").value = "";
   document.querySelector("#isbn").value = "";
 };
 
-// Event listeners
+// Event listener for adding of book
 document.querySelector("#book-form").addEventListener("submit", function (e) {
   // get form values
   const title = document.querySelector("#title").value;
@@ -60,7 +67,7 @@ document.querySelector("#book-form").addEventListener("submit", function (e) {
   const book = new Book(title, author, isbn);
 
   // instantiate a UI object
-  const ui = new UI();
+  const ui = new UI();  // This object has the four methods in its prototype
 
   // Validate submitted data
   if (title === "" || author === "" || isbn === "") {
@@ -71,7 +78,7 @@ document.querySelector("#book-form").addEventListener("submit", function (e) {
     ui.addBookToList(book);
 
     // show alert when book is added
-    ui.showAlert('Bood added!', 'success')
+    ui.showAlert('Book added!', 'success')
 
     // Clear fields
     ui.clearFields();
@@ -79,3 +86,13 @@ document.querySelector("#book-form").addEventListener("submit", function (e) {
 
   e.preventDefault();
 });
+
+// Event listener for deleting book
+document.querySelector('#book-list').addEventListener('click', function(e){
+  const ui = new UI()
+  ui.deleteBook(e.target)
+
+  // Show alert:
+  ui.showAlert('Book Removed', 'success')
+  e.preventDefault()
+})
