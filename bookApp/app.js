@@ -47,8 +47,37 @@ UI.prototype.showAlert = function (message, className) {
 UI.prototype.deleteBook = function(target) {
   if(target.className === 'delete'){
     target.parentElement.parentElement.remove()   // traversing the DOM to get from <a> element to
+    deleteStoredBook(target.parentElement.parentElement)
   }                                              // <td> and then to <tr> element, to delete a row
 }
+
+UI.prototype.storeBook = function(book) {
+  let books;
+  if (localStorage.getItem("books") === null) {
+    books = [];
+  } else {
+    books = JSON.parse(localStorage.getItem("books"));
+  }
+  books.push(book);
+
+  localStorage.setItem("books", JSON.stringify(books));
+}
+
+UI.prototype.deleteStoredBook = function(book) {
+  let books
+  if(localStorage.getItem("books") === null) {
+    books = []
+  } else {
+    books = JSON.parse(localStorage.getItem('books'))
+  }
+  books.forEach(function(book, index) {
+    if(book.isbn === isbn){
+    books.splice(index, 1)
+    }
+  })
+  localStorage.setItem('books', JSON.stringify(books))
+}
+
 
 UI.prototype.clearFields = function () {
   document.querySelector("#title").value = "";
@@ -79,6 +108,8 @@ document.querySelector("#book-form").addEventListener("submit", function (e) {
 
     // show alert when book is added
     ui.showAlert('Book added!', 'success')
+
+    ui.storeBook(book)
 
     // Clear fields
     ui.clearFields();

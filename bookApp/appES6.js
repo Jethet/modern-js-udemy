@@ -15,7 +15,7 @@ class UI {
       <td>${book.title}</td>
       <td>${book.author}</td>
       <td>${book.isbn}</td>
-      <td><a href="# class="delete" autocomplete="off">X</td>`;
+      <td><a href="#" class="delete">X</td>`;
     list.appendChild(row);
   }
 
@@ -46,6 +46,47 @@ class UI {
   }
 }
 
+// Local storage class
+class Store {
+  static getBooks() {
+    let books;
+    if (localStorage.getItem("books") === null) {
+      books = [];
+    } else {
+      books = JSON.parse(localStorage.getItem("books"));
+    }
+    return books;
+  }
+
+  static displayBooks() {
+    const books = Store.getBooks();
+    books.forEach(function (book) {
+      const ui = new UI();
+      //Add book to UI
+      ui.addBookToList(book);
+    });
+  }
+
+  static addBook(book) {
+    const books = Store.getBooks();
+    books.push(book);
+    localStorage.setItem("books", JSON.stringify(books));
+  }
+
+  static removeBook(isbn) {
+    const books = Store.getBooks();
+    books.forEach(function(book, index) {
+      if(book.isbn === isbn){
+        books.splice(index, 1)
+      }
+    })
+    localStorage.setItem('books', JSON.stringify(books))
+  }
+}
+
+// Event listener DOM load
+document.addEventListener("DOMContentLoaded", Store.displayBooks);
+
 // Event listener for adding of book
 document.querySelector("#book-form").addEventListener("submit", function (e) {
   // get form values
@@ -67,6 +108,9 @@ document.querySelector("#book-form").addEventListener("submit", function (e) {
     // Add book to list
     ui.addBookToList(book);
 
+    // Add to local storage
+    Store.addBook(book);
+
     // show alert when book is added
     ui.showAlert("Book added!", "success");
 
@@ -81,6 +125,11 @@ document.querySelector("#book-form").addEventListener("submit", function (e) {
 document.querySelector("#book-list").addEventListener("click", function (e) {
   const ui = new UI();
   ui.deleteBook(e.target);
+
+  // Remove from LS: unique id for book is isbn; to access this you need to
+  // traverse the dom: the e.target is the <a>, one up is <td>, and to get
+  // to the <td> before that (which has the isbn), use previousElementSibling:
+  Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
 
   // Show alert:
   ui.showAlert("Book Removed", "success");
