@@ -33,3 +33,24 @@ function getJSON() {
       console.log(err);
     });
 }
+
+// Get API data
+document.querySelector('#button3').addEventListener('click', getExternal)
+
+function getExternal() {
+  fetch("https://api.github.com/events")
+  .then(function(res) {
+    return res.json()
+  })
+  .then(function(data) {
+    let output = ''
+    data.forEach(function(event) {
+      output += `<li>${event.id}</li>`
+    })
+    document.querySelector('#output').innerHTML = output
+  })
+  .catch(function(err) {
+    console.log(err);
+    
+  })
+}
