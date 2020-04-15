@@ -17,3 +17,18 @@
 // .then(res => console.log(res))
 // .catch(err => console.log(err))
 
+
+//EXAMPLE: get users from jsonplaceholder API
+
+async function getUsers() {
+  // await response of fetch call
+  const response = await fetch('http://jsonplaceholder.typicode.com/users')
+  
+  // only proceed once fetch promise is resolved
+  const data = await response.json()
+
+  // proceed when second promise is resolved
+  return data
+}
+
+getUsers().then(users => console.log(users));
