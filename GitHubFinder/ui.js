@@ -2,6 +2,7 @@ class UI {
   constructor() {
     this.profile = document.querySelector("#profile");
   }
+  // Display profile in UI
   showProfile(user) {
     this.profile.innerHTML = `
       <div class="card card-body mb-3">
@@ -28,5 +29,66 @@ class UI {
       <h3 class="page-heading mb-3">Latest Repos</h3>
       <div id="repos"></div>
     `;
+  }
+
+  // Show alert message if user does not exist
+  showAlert(message, className) {
+    // First clear any remaining alerts:
+    this.clearAlert();
+    // create div and add class name
+    const div = document.createElement("div");
+    div.className = className;
+    // Add text node
+    div.appendChild(document.createTextNode(message));
+    // Parent for div
+    const container = document.querySelector(".searchContainer");
+    // Get search box
+    const search = document.querySelector(".search");
+    // Insert alert
+    container.insertBefore(div, search);
+
+    // Timeout after 3 seconds
+    setTimeout(() => {
+      this.clearAlert();
+    }, 3000);
+  }
+
+  // Show user repos
+  showRepos(repos) {
+    let output = ''
+    repos.forEach((repo) => {
+      output += `
+      <div class="card card-body mb-2">
+        <div class="row">
+          <div class="col-md-6">
+           <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+          </div>
+          <div class="col-md-6">
+          <span class="badge badge-primary">Stars: ${repo.stargazers_count}</span>
+          <span class="badge badge-secondary">Watchers: ${repo.watchers_count}</span>
+          <span class="badge badge-success">Forks: ${repo.forks_count}</span>
+          </div>
+        </div>
+        </div>
+      
+      </div>`
+    })
+
+    // Output repositories
+    document.querySelector('#repos').innerHTML = output
+  }
+
+  // Clear alert message between inputs
+  clearAlert() {
+    const currentAlert = document.querySelector(".alert");
+
+    if (currentAlert) {
+      currentAlert.remove();
+    }
+  }
+
+  // Clear profile data
+  clearProfile() {
+    this.profile.innerHTML = "";
   }
 }
