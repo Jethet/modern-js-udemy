@@ -1,6 +1,9 @@
 // Initialize class GitHub (see github.js)
 const github = new Github
 
+// Inititalize UI
+const ui = new UI
+
 // Create event listener for search input
 const searchUser = document.querySelector("#searchUser");
 searchUser.addEventListener("keyup", (e) => {
@@ -17,11 +20,12 @@ searchUser.addEventListener("keyup", (e) => {
 
       } else {
         // Show profile (in UI file)
+        ui.showProfile(data.profile)
       }
     })  
   } else {
     // Clear profile
-    
+
   }
 
 
