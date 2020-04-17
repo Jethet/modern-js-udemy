@@ -14,17 +14,17 @@ class UI {
 
   paint(weather) {
     this.location.textContent = weather.name;
-    this.desc.textContent = weather.weather[0].description;
-    this.string.textContent = weather.main.temp + "Celsius";
+    this.desc.textContent = `Currently ${weather.weather[0].description}`;
+    this.string.textContent = weather.main.temp + " Celsius";
     // Set source of icon as attribute:
     this.icon.setAttribute(
       "src",
       `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
     );
-    this.temp.textContent = `Current temperature: ${weather.main.temp}`
-    this.feelsLike.textContent = `Visibility: ${weather.visibility}m`
-    this.tempMin.textContent = `Minimum temperature: ${weather.main.temp_min}`
-    this.tempMax.textContent = `Maximum temperature: ${weather.main.temp_max}`
-    this.humidity.textContent = `Relative humidity: ${weather.main.humidity}`
+    this.temp.textContent = `Current temperature: ${weather.main.temp} degrees`
+    this.feelsLike.textContent = `Visibility: ${weather.visibility} metres`
+    this.tempMin.textContent = `Minimum temperature: ${weather.main.temp_min} degrees`
+    this.tempMax.textContent = `Maximum temperature: ${weather.main.temp_max} degrees`
+    this.humidity.textContent = `Relative humidity: ${weather.main.humidity} percent`
 }
 }
