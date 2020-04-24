@@ -68,6 +68,19 @@ const ItemCtrl = (function () {
       });
       return found;
     },
+    deleteItem: function (id) {
+      // Get ids
+      const ids = data.items.map(function (item) {
+        return item.id;
+      });
+      // Get index
+      const index = ids.indexOf(id);
+      // Remove item
+      data.items.splice(index, 1);
+    },
+    clearAllItems: function() {
+      data.items = []
+    },
     setCurrentItem: function (item) {
       data.currentItem = item;
     },
@@ -94,11 +107,12 @@ const ItemCtrl = (function () {
 const UICtrl = (function () {
   const UISelectors = {
     itemList: "#item-list",
-    listItems: '#item-list li',
+    listItems: "#item-list li",
     addBtn: ".add-btn",
     updateBtn: ".update-btn",
     deleteBtn: ".delete-btn",
     backBtn: ".back-btn",
+    clearBtn: ".clear-btn",
     itemNameInput: "#item-name",
     itemCaloriesInput: "#item-calories",
     totalCalories: ".total-calories",
@@ -148,22 +162,27 @@ const UICtrl = (function () {
       // Insert item
       document.querySelector(UISelectors.itemList).insertAdjacentElement("beforeend", li);
     },
-    updateListItem: function(item) {
-      let listItems = document.querySelectorAll(UISelectors.listItems)
+    updateListItem: function (item) {
+      let listItems = document.querySelectorAll(UISelectors.listItems);
       // This returns a node list: a node list has to be changed into an array to loop over it
-      listItems = Array.from(listItems)
+      listItems = Array.from(listItems);
 
-      listItems.forEach(function(listItem) {
-        const itemID = listItem.getAttribute('id')
+      listItems.forEach(function (listItem) {
+        const itemID = listItem.getAttribute("id");
 
-        if(itemID === `item-${item.id}`) {
+        if (itemID === `item-${item.id}`) {
           document.querySelector(`#${itemID}`).innerHTML = `
           <strong>${item.name}:</strong> <em>${item.calories} Calories</em>
           <a href="#" class="secondary-content">
           <i class="edit-item fa fa-pencil"></i>
-          </a>`
+          </a>`;
         }
-      })
+      });
+    },
+    deleteListItem: function (id) {
+      const itemID = `#item-${id}`;
+      const item = document.querySelector(itemID);
+      item.remove();
     },
     clearInput: function () {
       document.querySelector(UISelectors.itemNameInput).value = "";
@@ -177,6 +196,16 @@ const UICtrl = (function () {
         UISelectors.itemCaloriesInput
       ).value = ItemCtrl.getCurrentItem().calories;
       UICtrl.showEditState();
+    },
+    removeItems: function() {
+      let listItems = document.querySelectorAll(UISelectors.listItems)
+
+      // Turn node list into array
+      listItems = Array.from(listItems)
+
+      listItems.forEach(function(item) {
+        item.remove()
+      })
     },
     hideList: function () {
       document.querySelector(UISelectors.itemList).style.display = "none";
@@ -229,6 +258,20 @@ const App = (function (ItemCtrl, UICtrl) {
     document
       .querySelector(UISelectors.updateBtn)
       .addEventListener("click", itemUpdateSubmit);
+
+    // Delete item event
+    document
+      .querySelector(UISelectors.deleteBtn)
+      .addEventListener("click", itemDeleteSubmit);
+
+    // Back button event
+    document
+      .querySelector(UISelectors.backBtn)
+      .addEventListener("click", UICtrl.clearEditState);
+    // Clear items event
+    document
+      .querySelector(UISelectors.clearBtn)
+      .addEventListener("click", clearAllItemsClick);
   };
 
   // Add item submit
@@ -292,17 +335,51 @@ const App = (function (ItemCtrl, UICtrl) {
     const updatedItem = ItemCtrl.updateItem(input.name, input.calories);
 
     // Update UI with updated item
-    UICtrl.updateListItem(updatedItem)
-    
+    UICtrl.updateListItem(updatedItem);
+
     // Get total calories
     const totalCalories = ItemCtrl.getTotalCalories();
     //add total calories to UI field
     UICtrl.showTotalCalories(totalCalories);
 
-    UICtrl.clearEditState()
+    UICtrl.clearEditState();
   };
 
-  // Return from the module: public method
+  // Delete button event
+  const itemDeleteSubmit = function (e) {
+    e.preventDefault();
+    // get current item
+    const currentItem = ItemCtrl.getCurrentItem();
+
+    // Delete from data structure
+    ItemCtrl.deleteItem(currentItem.id);
+
+    // Delete from UI
+    UICtrl.deleteListItem(currentItem.id);
+    // Recalculate total calories
+    const totalCalories = ItemCtrl.getTotalCalories();
+    // Display calculated calories to UI field and clear input fields
+    UICtrl.showTotalCalories(totalCalories);
+    UICtrl.clearEditState();
+  };
+
+  // Clear all items event
+  const clearAllItemsClick = function() {
+    // Delete all items from the data structure
+    ItemCtrl.clearAllItems()
+
+    const totalCalories = ItemCtrl.getTotalCalories();
+    // Display calculated calories to UI field and clear input fields
+    UICtrl.showTotalCalories(totalCalories);
+
+    // Remove from UI
+    UICtrl.removeItems()
+
+    // Hide the ul
+    UICtrl.hideList()
+  }
+
+  // Return from the module: public methods
   return {
     init: function () {
       // Set initial state
