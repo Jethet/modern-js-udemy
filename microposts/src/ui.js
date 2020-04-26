@@ -50,7 +50,7 @@ class UI {
       this.clearAlert()
     }, 3000)
   }
-
+  // Alert message re. clear data
   clearAlert() {
     const currentAlert = document.querySelector('.alert')
 
@@ -62,6 +62,13 @@ class UI {
   clearFields() {
     this.titleInput = "";
     this.bodyInput = "";
+  }
+
+  // Fill form with data to edit
+  fillForm(data) {
+    this.titleInput.value = data.title
+    this.bodyInput.value = data.body
+    this.idInput.value  = data.id
   }
 }
 
