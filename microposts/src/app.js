@@ -11,7 +11,10 @@ document.querySelector(".post-submit").addEventListener("click", submitPost);
 document.querySelector("#posts").addEventListener("click", deletePost);
 
 // Listen for edit state
-document.querySelector('#posts').addEventListener('click', enableEdit)
+document.querySelector("#posts").addEventListener("click", enableEdit);
+
+// Listen for cancel (event delegation)
+document.querySelector(".card-form").addEventListener("click", cancelEdit);
 
 // Get posts
 function getPosts() {
@@ -25,42 +28,71 @@ function getPosts() {
 function submitPost() {
   const title = document.querySelector("#title").value;
   const body = document.querySelector("#body").value;
+  const id = document.querySelector("#id").value;
   // Object literal for values from form
   const data = {
     title,
     body,
   };
-  // Create post
-  http
-    .post("http://localhost:3000/posts", data)
-    .then((data) => {
-      //
-      ui.showAlert("Post added", "alert alert-success");
-      ui.clearFields();
-      getPosts(); // this calls all posts, including the new one, for display
-    })
-    .catch((err) => console.log(err));
+
+  // Validate input
+  if (title === "" || body === "") {
+    ui.showAlert("Please fill in all fields", "alert alert-danger");
+  } else {
+    // check for hidden id: if there is no id, then it is 'add' state
+    if (id === "") {
+      // Create post
+      http
+        .post("http://localhost:3000/posts", data)
+        .then((data) => {
+          //
+          ui.showAlert("Post added", "alert alert-success");
+          ui.clearFields();
+          getPosts(); // this calls all posts, including the new one, for display
+        })
+        .catch((err) => console.log(err));
+    } else {
+      // If id is present, this means it is the 'edit' state
+      http
+        .put(`http://localhost:3000/posts/${id}`, data)
+        .then((data) => {
+          ui.showAlert("Post updated", "alert alert-success");
+          ui.changeFormState("add");
+          getPosts(); // this calls all posts, including the new one, for display
+        })
+        .catch((err) => console.log(err));
+    }
+  }
 }
 
 // Update post: enable edit state
 function enableEdit(e) {
-  e.preventDefault()
-  if(e.target.parentElement.classList.contains('edit')) {
+  e.preventDefault();
+  if (e.target.parentElement.classList.contains("edit")) {
     // by logging e.target.parentElement.dataset.id, you can check if you get
     // the correct id when you click on the 'edit' icon
     const id = e.target.parentElement.dataset.id;
     // Get the title and body to be edited
-    const title = e.target.parentElement.previousElementSibling.previousElementSibling.textContent
-    const body = e.target.parentElement.previousElementSibling.textContent
+    const title =
+      e.target.parentElement.previousElementSibling.previousElementSibling.textContent;
+    const body = e.target.parentElement.previousElementSibling.textContent;
 
     const data = {
       id,
       title,
-      body
-    }
+      body,
+    };
     // Fill form with current post
-    ui.fillForm(data)
-  }  
+    ui.fillForm(data);
+  }
+}
+
+// Cancel edit: target the post-cancel button as reference with 'contains'
+function cancelEdit(e) {
+  if (e.target.classList.contains("post-cancel")) {
+    ui.changeFormState("add"); // back to original state
+  }
+  e.preventDefault();
 }
 
 // Delete post
@@ -70,10 +102,11 @@ function deletePost(e) {
     const id = e.target.parentElement.dataset.id;
 
     if (confirm("Are you sure?")) {
-      http.delete(`http://localhost:3000/posts/${id}`)
-        .then((data) => {
+      http
+        .delete(`http://localhost:3000/posts/${id}`)
+        .then(data => {
           ui.showAlert("Post removed", "alert alert-success");
-          getPosts()
+          getPosts();
         })
         .catch((err) => console.log(err));
     }
